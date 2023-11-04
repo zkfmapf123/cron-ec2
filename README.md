@@ -23,10 +23,12 @@
     ## Provisioning
     cd infra
     tf init
-    tf plan -var-file=[tfvars file]
-    tf apply -var-file=[tfvars file]
+    tf plan -var-file=[tfvars file] OR Make plan
+    tf apply -var-file=[tfvars file] OR Make apply
 
     ## Lambda Function Update
+    cd function
+    make run
 
     ## Test
 ```

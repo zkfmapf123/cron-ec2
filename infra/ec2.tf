@@ -38,6 +38,9 @@ resource "aws_key_pair" "key_pair" {
 ### EC2
 ############################################################
 resource "aws_instance" "instance" {
+
+  count = 3
+
   ami                    = var.ami
   instance_type          = var.instance_type
   subnet_id              = var.subnet_id
@@ -45,6 +48,6 @@ resource "aws_instance" "instance" {
   key_name               = aws_key_pair.key_pair.key_name
 
   tags = {
-    Name = "cron-ec2-example"
+    Name = "cron-ec2-example-${count.index}"
   }
 }
