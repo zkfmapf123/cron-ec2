@@ -7,9 +7,9 @@
 ## Folders
 
 ```
-    -- infra
+    infra
         |-- ec2.tf
         |-- event-bridge.tf
         |-- lambda.tf
-    --function
+    function
 ```
