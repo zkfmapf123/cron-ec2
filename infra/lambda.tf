@@ -81,4 +81,8 @@ resource "aws_lambda_function" "function" {
   source_code_hash = data.archive_file.function_archive.output_base64sha256
 
   runtime = "go1.x"
+
+  lifecycle {
+    ignore_changes = ["environment", "filename", "source_code_hash"]
+  }
 }
