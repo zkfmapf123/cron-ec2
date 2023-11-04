@@ -38,3 +38,7 @@
     cd function
     make run
 ```
+
+## 혹시
+
+- Lambda에서 Timeout이 난다면, Timeout 시간을 늘려줘야 합니다 (Default 3초)

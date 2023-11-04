@@ -3,3 +3,6 @@ plan:
 
 apply:
 	@terraform apply -var-file=vars.tfvars
+
+destroy:
+	@terraform destroy -var-file=vars.tfvars
