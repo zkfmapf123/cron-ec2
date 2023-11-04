@@ -23,10 +23,12 @@
 ## Execution
 
 1. .tfvars 작성 (./infra/tfvars.examples 참고)
-
-2. Terraform + Provisioning
+2. provider.tf를 수정하여야 합니다.
+3. Terraform + Provisioning
 
 ```sh
+
+    alias tf='terraform'
 
     ## Provisioning
     cd infra

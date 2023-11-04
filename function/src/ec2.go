@@ -3,8 +3,10 @@ package src
 import (
 	"context"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
+	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 )
 
 type AWSEC2 struct {
@@ -25,26 +27,29 @@ func NewEC2(ctx context.Context) *AWSEC2 {
 	}
 }
 
-func (e AWSEC2) Describe(instanceIds []string) map[string]string {
+func (e AWSEC2) DescribeUseTag(tag string) map[string]string {
 	descMap := make(map[string]string)
 
-	input := &ec2.DescribeInstanceStatusInput{
-		InstanceIds: instanceIds,
+	input := &ec2.DescribeInstancesInput{
+		Filters: []types.Filter{
+			{
+				Name:   aws.String("tag:Properties"),
+				Values: []string{tag},
+			},
+		},
 	}
 
-	output, err := e.client.DescribeInstanceStatus(e.ctx, input)
+	output, err := e.client.DescribeInstances(e.ctx, input)
 	if err != nil {
 		panic(err)
 	}
 
-	// Stopped
-	stauts := "ok"
-	if len(output.InstanceStatuses) == 0 {
-		stauts = "stopped"
-	}
+	for _, reserv := range output.Reservations {
+		for _, ins := range reserv.Instances {
+			id, status := *ins.InstanceId, ins.State.Name
+			descMap[id] = string(status)
+		}
 
-	for _, id := range instanceIds {
-		descMap[id] = stauts
 	}
 
 	return descMap
@@ -54,7 +59,7 @@ func (e AWSEC2) Describe(instanceIds []string) map[string]string {
 func (e AWSEC2) ExecuteEC2(ec2Map map[string]string) map[string]string {
 
 	for instanceId, status := range ec2Map {
-		if status == "ok" {
+		if status == "running" {
 			errMsg := offToEC2(e, instanceId)
 
 			if errMsg != "" {

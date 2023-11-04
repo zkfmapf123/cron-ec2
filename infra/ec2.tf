@@ -49,5 +49,6 @@ resource "aws_instance" "instance" {
 
   tags = {
     Name = "cron-ec2-example-${count.index}"
+    Properties = "onoff-instance"
   }
 }
